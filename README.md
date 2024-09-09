@@ -88,3 +88,27 @@ void loop(){
   Serial.print("Amarelo");
     Serial.println(digitalInput);
 }
+
+
+# ARDUINO 4 LDR
+
+int FOTO=6;
+void setup()
+{
+ pinMode(3, OUTPUT);
+ pinMode(A0, INPUT);
+  Serial.begin(9600);
+}
+
+void loop(){
+  analogWrite(3,HIGH);
+ int FOTO= analogRead (A0);
+      Serial.println(FOTO);
+  if (FOTO <=650){
+    digitalWrite(3,HIGH);
+  Serial.print("ligado");
+       delay(3000);
+  digitalWrite(3,LOW);
+  Serial.print("desligado");
+  }
+  }
