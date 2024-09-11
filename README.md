@@ -190,3 +190,54 @@ void loop()
   }
       delay(2000);
 }
+
+
+# ARDUINO 6 BUZZER
+
+#define R 3
+#define G 5
+#define B 6
+  int buzzer =8;
+void setup()
+{
+  pinMode(buzzer, OUTPUT);
+  pinMode(R, OUTPUT);
+  pinMode(G, OUTPUT);
+  pinMode(B, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+ 
+  tone(buzzer, 200, 1000);
+  analogWrite(R,255); 
+  analogWrite(G,0);
+  analogWrite(B,0);
+  delay(500);
+  tone(buzzer, 300, 1000);
+  analogWrite(B,255); 
+  analogWrite(G,0);
+  analogWrite(R,0); 
+   delay(500);
+  noTone(buzzer);
+  tone(buzzer, 400, 1000);
+  analogWrite(B,0); 
+  analogWrite(G,255);
+  analogWrite(R,0); 
+   delay(500);
+  noTone(buzzer);
+  tone(buzzer, 500, 1000);
+  analogWrite(B,0); 
+  analogWrite(G,105);
+  analogWrite(R,150); 
+   delay(500);
+  noTone(buzzer);
+  tone(buzzer, 1000, 1000);
+  analogWrite(B,105); 
+  analogWrite(G,0);
+  analogWrite(R,150); 
+   delay(500);
+  noTone(buzzer);
+  delay(500);
+}
