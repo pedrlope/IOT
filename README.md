@@ -357,7 +357,7 @@ void loop()
     noTone(buzzer);
     digitalWrite(8,LOW);
   }
- # ARDUINO APP
+ # ARDUINO 9 APP
   const int buzzer =8;
 int inches =0;
 int cm =0;
@@ -412,3 +412,28 @@ void loop()
   }
   
 }
+
+
+# ARDUINO 10 LCD + TEMPERATURA
+
+#include<LiquidCrystal.h>
+
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+void setup()
+{
+ lcd.begin(16, 2);
+}
+
+void loop()
+{
+    int SensorTemperatura=analogRead(A0);
+    float Tensao=SensorTemperatura*5;
+    Tensao/=1024;
+    float TemperaturaC=(Tensao-0.5)*100;
+      Serial.print(TemperaturaC);
+      Serial.println("C,");
+  lcd.setCursor(5,0);          
+  lcd.print(TemperaturaC);
+    lcd.setCursor(11,0);          
+  lcd.print("C");
+  }
