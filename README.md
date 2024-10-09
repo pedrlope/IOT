@@ -622,3 +622,46 @@ void loop()
   }
 }
 
+# ARDUINO  13 PONTENCIOMETRO
+
+int potenciometro = 0;
+int potenciometro_ = 0;
+ const int inferior = 512; 
+ const int superior = 520; 
+#include<LiquidCrystal.h>
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+void setup()
+{
+  
+  pinMode(A0, INPUT);
+  pinMode(A1, INPUT);
+  Serial.begin(9600);
+{
+ lcd.begin(16, 2);
+}
+}
+void loop()
+{
+  potenciometro = analogRead(A0);
+  if(potenciometro = superior){
+  Serial.print(potenciometro);
+  Serial.print("x,");
+  }
+  potenciometro_ = analogRead(A1);
+ if(potenciometro_ = inferior){
+  Serial.print(potenciometro_);
+  Serial.print("y,");
+ }
+  lcd.setCursor(0,0);          
+  lcd.print("EIXO X:"); 
+  lcd.setCursor(2,9);          
+  lcd.print(potenciometro); 
+  delay(3000);
+  lcd.clear();
+  lcd.setCursor(0,0);          
+  lcd.print("EIXO Y:"); 
+  lcd.setCursor(2,9);          
+  lcd.print(potenciometro_); 
+  delay(3000);
+  lcd.clear();
+  }
