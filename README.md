@@ -665,3 +665,76 @@ void loop()
   delay(3000);
   lcd.clear();
   }
+
+# ARDUINO JOYSTICK (NÃO ACABEI)
+
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+// DEFINIÇÕES
+#define endereco  0x20 // Endereços comuns: 0x3F
+#define colunas   16
+#define linhas    2
+
+// INSTANCIANDO OBJETOS
+LiquidCrystal_I2C lcd(endereco, colunas, linhas);
+
+int button = 0;
+int POTENCIOMETRO = 0;
+int POTENCIOMETRO_ = 0;
+const int inferior = 0; 
+const int superior = 1023; 
+
+void setup() {
+  pinMode(2, INPUT);
+  pinMode(A0, INPUT);
+  pinMode(A1, INPUT);
+  Serial.begin(9600);
+  
+  lcd.init(); // INICIA A COMUNICAÇÃO COM O DISPLAY
+  lcd.backlight(); // LIGA A ILUMINAÇÃO DO DISPLAY
+}
+  
+
+void loop() {
+  lcd.clear();
+
+  POTENCIOMETRO = analogRead(A0);
+  POTENCIOMETRO_ = analogRead(A1);
+
+  Serial.print(POTENCIOMETRO);
+  Serial.print(POTENCIOMETRO_);
+
+if (superior == POTENCIOMETRO) {
+    lcd.setCursor(0, 0);
+    lcd.print("PARA FRENTE");
+
+  } else if (superior == POTENCIOMETRO_) {
+    lcd.setCursor(0, 0);
+    lcd.print("DIREITA");
+
+  } else if (POTENCIOMETRO > 0 && superior > POTENCIOMETRO) {
+    lcd.setCursor(0, 0);
+    lcd.print("PARADO");
+
+  } else if (POTENCIOMETRO == 0) {
+    lcd.setCursor(0, 0);
+    lcd.print("PARA TRAZ");
+
+  } else if (POTENCIOMETRO_ == 0) {
+    lcd.setCursor(0, 0);
+    lcd.print("ESQUERDA");
+  }
+   else if (button == HIGH) {
+    lcd.setCursor(0, 0);
+    lcd.print("CLIQUE");
+  }
+
+    Serial.print(POTENCIOMETRO);
+    Serial.print("parado");
+
+    Serial.print(POTENCIOMETRO_);
+    Serial.print("parado");
+
+  delay(3000); // Espera por 3000 milissegundos
+}
