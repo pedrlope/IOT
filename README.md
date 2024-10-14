@@ -668,63 +668,56 @@ void loop()
 
 # ARDUINO JOYSTICK 
 
-#include <Wire.h>
+#include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
 
-// DEFINIÇÕES
-#define endereco 0x20 // Endereços comuns: 0x3F
-#define colunas 16
-#define linhas 2
-
-// INSTANCIANDO OBJETOS
-LiquidCrystal_I2C lcd(endereco, colunas, linhas);
+ #define endereco 0x20 
+ LiquidCrystal_I2C lcd(endereco, colunas, linhas);
 
 const int inferior = 0;
 const int superior = 1023;
 
-void setup() {
-    pinMode(2, INPUT); // Botão
-    pinMode(A0, INPUT); // Potenciômetro X
-    pinMode(A1, INPUT); // Potenciômetro Y
-    Serial.begin(9600);
-
-    lcd.init(); // INICIA A COMUNICAÇÃO COM O DISPLAY
-    lcd.backlight(); // LIGA A ILUMINAÇÃO DO DISPLAY
+void setup() { 
+Botão pinMode(2, INPUT); 
+Potenciômetro X pinMode (A0, INPUT);
+Potenciômetro Y pinMode (A1, INPUT); 
+Serial.begin(9600);
+lcd.init();
+lcd.backlight();
 }
 
-void loop() {
-    lcd.clear();
+void loop() { lcd.clear();
 
-    int POTENCIOMETRO_X = analogRead(A0);
-    int POTENCIOMETRO_Y = analogRead(A1);
-    int button = digitalRead(2);
+int POTENCIOMETRO_X = analogRead(A0);
+int POTENCIOMETRO_Y = analogRead(A1);
+int button = digitalRead(2);
 
-    Serial.print("POT_X: ");
-    Serial.println(POTENCIOMETRO_X);
-    Serial.print("POT_Y: ");
-    Serial.println(POTENCIOMETRO_Y);
+Serial.print("POT_X: ");
+Serial.println(POTENCIOMETRO_X);
+Serial.print("POT_Y: ");
+Serial.println(POTENCIOMETRO_Y);
 
-    if (POTENCIOMETRO_X > superior - 100) {
-        lcd.setCursor(0, 0);
-        lcd.print("PARA FRENTE");
-    } else if (POTENCIOMETRO_X < inferior + 100) {
-        lcd.setCursor(0, 0);
-        lcd.print("PARA TRAZ");
-    } else if (POTENCIOMETRO_Y > superior - 100) {
-        lcd.setCursor(0, 0);
-        lcd.print("DIREITA");
-    } else if (POTENCIOMETRO_Y < inferior + 100) {
-        lcd.setCursor(0, 0);
-        lcd.print("ESQUERDA");
-    } else {
-        lcd.setCursor(0, 0);
-        lcd.print("PARADO");
-    }
+if (POTENCIOMETRO_X > superior - 100) {
+    lcd.setCursor(0, 0);
+    lcd.print("PARA FRENTE");
+} else if (POTENCIOMETRO_X < inferior + 100) {
+    lcd.setCursor(0, 0);
+    lcd.print("PARA TRAZ");
+} else if (POTENCIOMETRO_Y > superior - 100) {
+    lcd.setCursor(0, 0);
+    lcd.print("DIREITA");
+} else if (POTENCIOMETRO_Y < inferior + 100) {
+    lcd.setCursor(0, 0);
+    lcd.print("ESQUERDA");
+} else {
+    lcd.setCursor(0, 0);
+    lcd.print("PARADO");
+}
 
-    if (button == HIGH) {
-        lcd.setCursor(0, 1);
-        lcd.print("CLIQUE");
-    }
+if (button == HIGH) {
+    lcd.setCursor(0, 1);
+    lcd.print("CLIQUE");
+}
 
-    delay(3000); // Espera por 3000 milissegundos
+delay(3000); // Espera por 3000 milissegundos
 }
