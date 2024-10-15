@@ -624,66 +624,26 @@ void loop()
 
 # ARDUINO  13 PONTENCIOMETRO
 
-int potenciometro = 0;
-int potenciometro_ = 0;
- const int inferior = 512; 
- const int superior = 520; 
-#include<LiquidCrystal.h>
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
-void setup()
-{
-  
-  pinMode(A0, INPUT);
-  pinMode(A1, INPUT);
-  Serial.begin(9600);
-{
- lcd.begin(16, 2);
-}
-}
-void loop()
-{
-  potenciometro = analogRead(A0);
-  if(potenciometro = superior){
-  Serial.print(potenciometro);
-  Serial.print("x,");
-  }
-  potenciometro_ = analogRead(A1);
- if(potenciometro_ = inferior){
-  Serial.print(potenciometro_);
-  Serial.print("y,");
- }
-  lcd.setCursor(0,0);          
-  lcd.print("EIXO X:"); 
-  lcd.setCursor(2,9);          
-  lcd.print(potenciometro); 
-  delay(3000);
-  lcd.clear();
-  lcd.setCursor(0,0);          
-  lcd.print("EIXO Y:"); 
-  lcd.setCursor(2,9);          
-  lcd.print(potenciometro_); 
-  delay(3000);
-  lcd.clear();
-  }
-
-# ARDUINO JOYSTICK 
-
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
 
- #define endereco 0x20 
- LiquidCrystal_I2C lcd(endereco, colunas, linhas);
+#define endereco 0x3F  
+#define colunas 16
+#define linhas 2
 
-const int inferior = 0;
-const int superior = 1023;
+LiquidCrystal_I2C lcd(endereco, colunas, linhas);
+
+const int inferior = 512; 
+const int superior = 520;
 
 void setup() { 
-Botão pinMode(2, INPUT); 
-Potenciômetro X pinMode (A0, INPUT);
-Potenciômetro Y pinMode (A1, INPUT); 
+ pinMode(2, INPUT); 
+ pinMode (A0, INPUT);
+ pinMode (A1, INPUT); 
 Serial.begin(9600);
-lcd.init();
-lcd.backlight();
+
+lcd.init(); // INICIA A COMUNICAÇÃO COM O DISPLAY
+lcd.backlight(); // LIGA A ILUMINAÇÃO DO DISPLAY
 }
 
 void loop() { lcd.clear();
@@ -692,28 +652,51 @@ int POTENCIOMETRO_X = analogRead(A0);
 int POTENCIOMETRO_Y = analogRead(A1);
 int button = digitalRead(2);
 
-Serial.print("POT_X: ");
+if (POTENCIOMETRO_X > 540){
+Serial.print("X: ");
 Serial.println(POTENCIOMETRO_X);
-Serial.print("POT_Y: ");
+delay(1000);
+}
+if (POTENCIOMETRO_Y > 540){
+Serial.print("Y: ");
 Serial.println(POTENCIOMETRO_Y);
+delay(1000);
+}
 
-if (POTENCIOMETRO_X > superior - 100) {
+
+if ((POTENCIOMETRO_X > superior && POTENCIOMETRO_X < 1023) && 
+    (POTENCIOMETRO_Y >= inferior && POTENCIOMETRO_Y < 1023)) {
     lcd.setCursor(0, 0);
     lcd.print("PARA FRENTE");
-} else if (POTENCIOMETRO_X < inferior + 100) {
+    Serial.print("para frente ");
+
+} 
+else if ((POTENCIOMETRO_X < inferior) && (POTENCIOMETRO_Y >= inferior && POTENCIOMETRO_Y < 1023))
+{
     lcd.setCursor(0, 0);
     lcd.print("PARA TRAZ");
-} else if (POTENCIOMETRO_Y > superior - 100) {
+    Serial.print("para traz ");
+} else if (POTENCIOMETRO_Y > superior + 100) {
     lcd.setCursor(0, 0);
     lcd.print("DIREITA");
-} else if (POTENCIOMETRO_Y < inferior + 100) {
+    Serial.print("direita  ");
+} else if (POTENCIOMETRO_Y < inferior - 100) {
     lcd.setCursor(0, 0);
     lcd.print("ESQUERDA");
+    Serial.print("esquerda  ");
 } else {
     lcd.setCursor(0, 0);
     lcd.print("PARADO");
+    Serial.print("parado  ");
 }
 
+if (button == HIGH) {
+    lcd.setCursor(0, 1);
+    lcd.print("CLIQUE");
+}
+
+delay(3000); // Espera por 3000 milissegundos
+}
 if (button == HIGH) {
     lcd.setCursor(0, 1);
     lcd.print("CLIQUE");
