@@ -1,0 +1,24 @@
+int inches =0; 
+int cm =0;
+
+long readUltrasonciDistance (int triggerPin, int echoPin) { pinMode(triggerPin, OUTPUT); digitalWrite(triggerPin,LOW); delayMicroseconds(2); digitalWrite(triggerPin,HIGH); delayMicroseconds(10); digitalWrite(triggerPin,LOW); pinMode(echoPin,INPUT); return pulseIn(echoPin, HIGH); } void setup() { pinMode(4, OUTPUT); pinMode(8, OUTPUT); pinMode(12, OUTPUT); Serial.begin(9600); } void loop() { cm =0.01723 * readUltrasonciDistance(5,7); inches =(cm/2.54); Serial.print(inches); Serial.print("in,"); Serial.print(cm); Serial.print("cm,"); delay(100);
+
+if(cm<10) { digitalWrite(12,HIGH); digitalWrite(8,LOW); digitalWrite(4,LOW); }
+
+if(cm<20 && cm>10) {
+  
+  digitalWrite(8,HIGH);
+  digitalWrite(4,LOW);
+  digitalWrite(12,LOW);
+}
+
+
+
+
+  if(cm>20) {
+
+    digitalWrite(4,HIGH);
+    digitalWrite(8,LOW);
+    digitalWrite(12,LOW);
+    }
+}
