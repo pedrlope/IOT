@@ -1,0 +1,19 @@
+#include <LiquidCrystal.h>
+
+// C++ code //
+
+#include <Wire.h> #include <LiquidCrystal_I2C.h>
+
+// DEFINIÇÕES #define endereco 0x20 // Endereços comuns: 0x3F #define colunas 16 #define linhas 2
+
+// INSTANCIANDO OBJETOS LiquidCrystal_I2C lcd(endereco, colunas, linhas);
+
+int counter;
+
+void setup() { pinMode(6, OUTPUT); pinMode(2, OUTPUT); pinMode(3, OUTPUT); pinMode(5, OUTPUT); pinMode(4, OUTPUT);
+
+lcd.backlight(); // LIGA A ILUMINAÇÃO DO DISPLAY lcd.clear(); // LIMPA O DISPLAY lcd.noBacklight(); // DESLIGA A ILUMINAÇÃO DO DISPLAY }
+
+void loop() { lcd.clear(); lcd.init(); // INICIA A COMUNICAÇÃO COM O DISPLAY lcd.backlight(); // LIGA A ILUMINAÇÃO DO DISPLAY
+
+lcd.clear(); // LIMPA O DISPLAY lcd.setCursor(0, 0); lcd.print("CARRO GREEN "); lcd.setCursor(0, 1); lcd.print("PEDESTRE RED "); digitalWrite(6, HIGH); digitalWrite(4, HIGH); delay(3000); // Wait for 3000 millisecond(s) digitalWrite(6, LOW); lcd.clear(); // LIMPA O DISPLAY lcd.setCursor(0, 0); lcd.print("CARRO YELLOW "); lcd.setCursor(0, 1); lcd.print("PEDESTRE RED "); digitalWrite(3, HIGH); delay(1000); // Wait for 1000 millisecond(s) digitalWrite(3, LOW); digitalWrite(4, LOW); lcd.clear(); // LIMPA O DISPLAY lcd.setCursor(0, 0); lcd.print("CARRO RED "); lcd.setCursor(0, 1); lcd.print("PEDESTRE GREEN"); digitalWrite(5, HIGH); digitalWrite(2, HIGH); delay(2000); // Wait for 2400 millisecond(s) digitalWrite(5, LOW); digitalWrite(2, LOW); for (counter = 0; counter < 6; ++counter) { lcd.clear(); // LIMPA O DISPLAY lcd.setCursor(0, 0); lcd.print("CARRO GREEN "); lcd.setCursor(0, 1); lcd.print("PEDESTRE RED"); digitalWrite(6, HIGH); digitalWrite(4, HIGH); delay(3000); // Wait for 3000 millisecond(s) digitalWrite(6, LOW); lcd.clear(); // LIMPA O DISPLAY lcd.setCursor(0, 0); lcd.print("CARRO YELLOW "); lcd.setCursor(0, 1); lcd.print("PEDESTRE RED "); digitalWrite(3, HIGH); delay(1000); // Wait for 1000 millisecond(s) digitalWrite(3, LOW); digitalWrite(4, LOW); lcd.clear(); // LIMPA O DISPLAY lcd.setCursor(0, 0); lcd.print("CARRO RED "); lcd.setCursor(0, 1); lcd.print("PEDESTRE GREEN"); digitalWrite(5, HIGH); digitalWrite(2, HIGH); } digitalWrite(13, LOW); }
