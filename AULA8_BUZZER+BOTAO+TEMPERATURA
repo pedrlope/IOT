@@ -1,0 +1,17 @@
+const int buzzer =2; int inches =0; int cm =0; int botao =0;
+
+long readUltrasonciDistance (int triggerPin, int echoPin) { pinMode(triggerPin, OUTPUT); digitalWrite(triggerPin,LOW); delayMicroseconds(2); digitalWrite(triggerPin,HIGH); delayMicroseconds(10); digitalWrite(triggerPin,LOW); pinMode(echoPin,INPUT); return pulseIn(echoPin, HIGH); } void setup() { pinMode(8, OUTPUT); pinMode(11, INPUT); pinMode(A0, INPUT); Serial.begin(9600); } void loop() { botao = digitalRead(11); cm =0.01723 * readUltrasonciDistance(5,7); inches =(cm/2.54); Serial.print(inches); Serial.print("in,"); Serial.print(cm); Serial.print("cm,"); delay(100);
+
+if(cm<20){ tone(buzzer,130); digitalWrite(8,HIGH);
+
+  int SensorTemperatura=analogRead(A0);
+float Tensao=SensorTemperatura*5;
+Tensao/=1024;
+float TemperaturaC=(Tensao-0.5)*100;
+  Serial.print(TemperaturaC);
+  Serial.println("C,");
+  
+ } else {
+  digitalWrite(8,LOW);
+}
+if (botao==HIGH){ noTone(buzzer); digitalWrite(8,LOW); }
