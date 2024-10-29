@@ -1,0 +1,46 @@
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SH1106.h>
+#include <Fonts/FreeMono9pt7b.h>
+#include <Fonts/FreeSansBoldOblique9pt7b.h>
+#include <Fonts/FreeMonoOblique9pt7b.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+Adafruit_SH1106 display(OLED_RESET);
+
+#define pinSensor 7
+
+void setup() {
+  pinMode(pinSensor, INPUT);
+  display.begin(SH1106_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay();
+  Serial.begin(9600);
+}
+
+void loop() {
+  bool estadoSensor = digitalRead(pinSensor);
+
+  display.clearDisplay();
+  display.setFont(&FreeMonoOblique9pt7b);
+  display.setTextColor(WHITE);
+  display.setTextSize(1); // Tamanho válido
+
+  if (estadoSensor == HIGH) { // Se o sensor não detectar campo magnético (sinal HIGH)
+    display.setCursor(0, 12);
+    display.print("TOQUE");
+    display.setCursor(0, 36);
+    display.print("DETECTADO");
+    Serial.println("TOQUE detectado");
+  } else if (estadoSensor == LOW) { // Se o sensor detectar campo magnético (sinal LOW)
+    display.setCursor(0, 12);
+    display.print("NAO");
+    display.setCursor(0, 36);
+    display.print("DETECTADO");
+    Serial.println("TOQUE NÃO DETECTADO");
+  }
+
+  display.display(); // Atualiza o display com o que foi configurado
+  delay(500); // Aguarda meio segundo antes de repetir o loop
+}
