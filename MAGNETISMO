@@ -1,0 +1,52 @@
+#include <Wire.h> // Biblioteca para uso do protocolo I2C
+#include <Adafruit_GFX.h> // Biblioteca para manipulação gráfica no display
+#include <Adafruit_SH1106.h> // Biblioteca para operação do driver de controle do display
+
+#include <Fonts/FreeMono9pt7b.h> // Fonte para alteração do texto
+#include <Fonts/FreeSansBoldOblique9pt7b.h> // Fonte para alteração do texto
+#include <Fonts/FreeMonoOblique9pt7b.h> // Fonte para alteração do texto
+
+#define SCREEN_WIDTH 128 // Largura do display
+#define SCREEN_HEIGHT 64  // Altura do display
+#define OLED_RESET -1 // Em displays que não possuem pino RESET, é dado o valor -1
+Adafruit_SH1106 display(OLED_RESET); // Declaração da tela com o nome "display"
+
+#define pinSensor 7 // Definindo o pino 7 como entrada para o sensor magnético
+
+void setup() {
+  pinMode(pinSensor, INPUT); // Configura o pino do sensor como entrada
+  display.begin(SH1106_SWITCHCAPVCC, 0x3C); // Inicializa o display OLED com o endereço I2C 0x3C
+  display.clearDisplay(); // Limpa o display inicialmente
+  Serial.begin(9600); // Inicializa a comunicação serial
+}
+
+void loop() {
+  bool estadoSensor = digitalRead(pinSensor); // Lê o estado do sensor magnético
+  int ligado = 1;
+  int desligado = 0;
+
+  display.clearDisplay(); // Limpa o display
+  display.setFont(&FreeMonoOblique9pt7b); // Define a fonte a ser utilizada
+  display.setTextColor(WHITE); // Define a cor do texto
+  display.setTextSize(1); // Define o tamanho do texto
+
+  if (estadoSensor == ligado) { // Se o sensor detectar campo magnético (sinal HIGH)
+    display.setCursor(0, 12); // Define a posição do texto na linha 1
+    display.print("Campo magnetico nao");
+    display.setCursor(0, 50); // Define a posição do texto na linha 2
+    display.print(" DETECTADO");
+    Serial.println("Campo magnetico não DETECTADO"); // Envia mensagem ao monitor serial
+    delay(500);
+  }
+  if (estadoSensor == desligado) {
+    display.setCursor(0, 12); // Define a posição do texto na linha 1
+    display.print("Campo magnetico");
+    display.setCursor(0, 50); // Define a posição do texto na linha 2
+    display.print("DETECTADO");
+    Serial.println("Campo magnetico DETECTADO"); // Envia mensagem ao monitor serial
+    delay(500);
+  }
+
+  display.display(); // Atualiza o display com as novas informações
+  delay(500); // Aguarda meio segundo antes de repetir o loop
+}
