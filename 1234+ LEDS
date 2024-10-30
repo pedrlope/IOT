@@ -1,0 +1,92 @@
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SH1106.h>
+#include <Fonts/FreeMono9pt7b.h>
+#include <Fonts/FreeSansBoldOblique9pt7b.h>
+#include <Fonts/FreeMonoOblique9pt7b.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+Adafruit_SH1106 display(OLED_RESET);
+
+// Definindo os pinos dos sensores
+#define pinSensor1 7
+#define pinSensor2 11
+#define pinSensor3 12
+#define pinSensor4 13
+
+void setup() {
+  pinMode(pinSensor1, INPUT);
+  pinMode(pinSensor2, INPUT);
+  pinMode(pinSensor3, INPUT);
+  pinMode(pinSensor4, INPUT);
+  pinMode(2, OUTPUT); // Saída para a lâmpada verde
+  pinMode(4, OUTPUT); // Saída para a lâmpada amarela
+  pinMode(8, OUTPUT); // Saída para a lâmpada vermelha
+  pinMode(10, OUTPUT); // Saída para a lâmpada branca
+  display.begin(SH1106_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay();
+  Serial.begin(9600);
+}
+
+void loop() {
+  bool estadoSensor1 = digitalRead(pinSensor1);
+  bool estadoSensor2 = digitalRead(pinSensor2);
+  bool estadoSensor3 = digitalRead(pinSensor3);
+  bool estadoSensor4 = digitalRead(pinSensor4);
+
+  display.clearDisplay();
+  display.setFont(&FreeMonoOblique9pt7b);
+  display.setTextColor(WHITE);
+  display.setTextSize(1); // Tamanho válido
+
+  if (estadoSensor1 == HIGH) { // Sensor 1
+    display.setCursor(0, 12);
+    display.print("LAMPADA AMARELA");
+    Serial.println("TOQUE detectado NA PORTA 1");
+    digitalWrite(2, LOW);
+    digitalWrite(4, HIGH);
+    digitalWrite(8, LOW);
+    digitalWrite(10, LOW);
+  } 
+  else if (estadoSensor2 == HIGH) { // Sensor 2
+    display.setCursor(0, 12);
+    display.print("LAMPADA VERDE");
+    Serial.println("TOQUE DETECTADO NA PORTA 2");
+    digitalWrite(2, HIGH);
+    digitalWrite(4, LOW);
+    digitalWrite(8, LOW);
+    digitalWrite(10, LOW);
+  }
+  else if (estadoSensor3 == HIGH) { // Sensor 3
+    display.setCursor(0, 12);
+    display.print("LAMPADA VERMELHA");
+    Serial.println("TOQUE DETECTADO NA PORTA 3");
+    digitalWrite(8, HIGH);
+    digitalWrite(4, LOW);
+    digitalWrite(2, LOW);
+    digitalWrite(10, LOW);
+  }
+  else if (estadoSensor4 == HIGH) { // Sensor 4
+    display.setCursor(0, 12);
+    display.print("LAMPADA LARANJA");
+    Serial.println("TOQUE DETECTADO NA PORTA 4");
+    digitalWrite(10, HIGH);
+    digitalWrite(8, LOW);
+    digitalWrite(2, LOW);
+    digitalWrite(4, LOW);
+  }
+  else {
+    display.setCursor(0, 12);
+    display.print("NENHUM TOQUE");
+    Serial.println("TOQUE NÃO DETECTADO");
+    digitalWrite(2, LOW);
+    digitalWrite(4, LOW);
+    digitalWrite(8, LOW);
+    digitalWrite(10, LOW);
+  }
+
+  display.display(); // Atualiza o display com o que foi configurado
+  delay(500); // Aguarda meio segundo antes de repetir o loop
+}
