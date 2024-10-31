@@ -1,0 +1,134 @@
+#include <Wire.h>
+
+#include <LiquidCrystal_I2C.h>
+
+
+
+#define endereco 0x3F  
+
+#define colunas 16
+
+#define linhas 2
+
+
+
+LiquidCrystal_I2C lcd(endereco, colunas, linhas);
+
+
+
+const int inferior = 512;
+
+const int superior = 520;
+
+
+
+void setup() {
+
+ pinMode(2, INPUT);
+
+ pinMode (A0, INPUT);
+
+ pinMode (A1, INPUT);
+
+Serial.begin(9600);
+
+
+
+lcd.init(); // INICIA A COMUNICAÇÃO COM O DISPLAY
+
+lcd.backlight(); // LIGA A ILUMINAÇÃO DO DISPLAY
+
+}
+
+
+
+void loop() { lcd.clear();
+
+
+
+int X = analogRead(A0);
+
+int Y = analogRead(A1);
+
+int button = digitalRead(2);
+
+
+
+Serial.print("X: ");
+
+Serial.println(X);
+
+Serial.print("Y: ");
+
+Serial.println(Y);
+
+delay(1000);
+
+
+
+if ((X > superior && X < 1023) &&
+
+    (Y >= inferior && Y < 1023)) {
+
+    lcd.setCursor(0, 0);
+
+    lcd.print("PARA FRENTE");
+
+    Serial.print("para frente ");
+
+
+
+} else if ((X < inferior) &&
+
+    (Y >= inferior && Y < 1023)){
+
+
+
+    lcd.setCursor(0, 0);
+
+    lcd.print("PARA TRAZ");
+
+    Serial.print("para traz ");
+
+} else if (Y > superior + 100) {
+
+    lcd.setCursor(0, 0);
+
+    lcd.print("DIREITA");
+
+    Serial.print("direita  ");
+
+} else if (Y < inferior - 100) {
+
+    lcd.setCursor(0, 0);
+
+    lcd.print("ESQUERDA");
+
+    Serial.print("esquerda  ");
+
+} else {
+
+    lcd.setCursor(0, 0);
+
+    lcd.print("PARADO");
+
+    Serial.print("parado  ");
+
+}
+
+
+
+if (button == HIGH) {
+
+    lcd.setCursor(0, 1);
+
+    lcd.print("CLIQUE");
+
+}
+
+
+
+delay(3000); // Espera por 3000 milissegundos
+
+}
+
