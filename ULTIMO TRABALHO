@@ -1,0 +1,109 @@
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SH1106.h>
+#include <Fonts/FreeMono9pt7b.h>
+#include <Fonts/FreeSansBoldOblique9pt7b.h>
+#include <Fonts/FreeMonoOblique9pt7b.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+Adafruit_SH1106 display(OLED_RESET);
+
+// Definindo os pinos dos sensores
+#define pinSensor1 3
+#define pinSensor2 4
+#define pinSensor3 5
+#define pinSensor4 6
+
+void setup() {
+  pinMode(pinSensor1, INPUT);
+  pinMode(pinSensor2, INPUT);
+  pinMode(pinSensor3, INPUT);
+  pinMode(pinSensor4, INPUT);
+  pinMode(A0, INPUT);
+  pinMode(A1, INPUT);
+
+  display.begin(SH1106_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay();
+  Serial.begin(9600);
+}
+
+void loop() {
+  bool estadoSensor1 = digitalRead(pinSensor1);
+  bool estadoSensor2 = digitalRead(pinSensor2);
+  bool estadoSensor3 = digitalRead(pinSensor3);
+  bool estadoSensor4 = digitalRead(pinSensor4);
+  int buzzer = 7;
+  int sensorLuz = analogRead(A0);
+  int estadoC = 1;
+  int estadoK = 1;
+  int rfid = 0;
+  // Cálculo da temperatura
+  int SensorTemperatura = analogRead(A1);
+  float Tensao = SensorTemperatura * (5.0 / 1024.0);
+  float TemperaturaC = (Tensao - 0.5) * 100.0;
+  float TemperaturaK = (TemperaturaC + 273);
+
+
+Serial.println(sensorLuz);
+ 
+
+
+ while (sensorLuz < 250) { // Usar um valor limite adequado
+    sensorLuz = analogRead(A0);
+    display.setCursor(0, 0);
+    display.print("Anormal!!! ");
+    tone(buzzer, 1200);
+    delay(150);
+    noTone(buzzer);
+    delay(150);
+  } 
+
+  if(rfid == 1){
+display.setCursor(0, 12);
+  display.print("1 PARA CONFIGURAÇÕES");
+  display.setCursor(0, 46);
+  display.print("2 PARA RETORNAR AO SISTEMA ");
+  delay(2000);
+  }
+
+  // Verificar estado dos sensores
+  if (estadoSensor1 == HIGH) { // Sensor 1
+    display.setCursor(0, 12);
+    display.print(" 3 PARA CELSIUS");
+    display.setCursor(0, 30);
+    display.print(" 4 PARA KELVIN");
+    Serial.println("TOQUE detectado NA PORTA 1");
+    delay(2000);
+  } 
+  else if (estadoSensor2 == HIGH) { // Sensor 2
+    display.setCursor(0, 12);
+    Serial.println("TOQUE DETECTADO NA PORTA 2");
+  }
+  else if ( estadoSensor3 == HIGH) { // Sensor 3
+    Serial.println("TOQUE DETECTADO NA PORTA 3");
+    display.setCursor(0, 12);
+    display.print("CELSIUS ESCOLHIDO");
+    display.setCursor(0, 46);
+    display.print("RETORNANDO");
+     estadoC = 1;
+     estadoK = 0;
+  }
+  else if (estadoSensor4 == HIGH) { // Sensor 4 
+    Serial.println("TOQUE DETECTADO NA PORTA 4");
+    display.setCursor(0, 12);
+    display.print("KELVIN ESCOLHIDO");
+    display.setCursor(0, 46);
+    display.print("RETORNANDO");
+    estadoC = 0;
+    estadoK = 1;
+  }
+  else {
+    display.setCursor(0, 12);
+    Serial.println("TOQUE NÃO DETECTADO");
+  }
+
+  display.display(); // Atualiza o display com o que foi configurado
+  delay(500); // Aguarda meio segundo antes de repetir o loop
+}
